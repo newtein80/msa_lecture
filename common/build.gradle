@@ -1,0 +1,10 @@
+bootJar { enabled = false }   // 공통 모듈은 bootJar 로 패키징 할 필요 없음
+jar { enabled = true }        // 일반적인 JAR 파일로 패키징시킨다
+
+dependencies {
+	compileOnly libraries.lombok
+	developmentOnly libraries.spring_boot_starter_devtool
+	annotationProcessor libraries.lombok
+	testImplementation libraries.spring_boot_starter_test
+	testRuntimeOnly libraries.junit_platform_launcher
+}

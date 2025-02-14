@@ -1,0 +1,162 @@
+buildscript {
+    ext {
+        springBootVersion = '3.4.2'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "io.spring.gradle:dependency-management-plugin:1.1.7.RELEASE"
+    }
+}
+
+plugins {
+	// java 코드 컴파일, 테스트, 애플리케이션 패키징
+	id 'java'
+	// SpringBoot 애플리케이션을 실행, 실행 가능한 JAR 또는 WAR패키징
+	id 'org.springframework.boot' version '3.4.2'
+	// 섹션을 사용하여 프로젝트의 모든 종속성에 적용해야 하는 종속성 버전을 정의하여 충돌을 방지
+	id 'io.spring.dependency-management' version '1.1.7'
+	id 'java-library'
+}
+
+bootJar.enabled = false
+jar.enabled = false
+
+allprojects {
+    group 'com.mobigen'
+    version '1.0-SNAPSHOT'
+	sourceCompatibility = '21'
+
+	repositories {
+        mavenCentral()
+    }
+
+	configurations {
+        implementation.exclude module: 'spring-boot-starter-logging'
+    }
+}
+
+configurations {
+    // log4j2 사용을 위해 내장 Logger 제외
+    // 스프링 부트에서 Log4j2를 사용하기위해선 내부로깅에서 쓰이는 의존성을 제외해주어야 합니다. 기본적으로 Spring은 Slf4j라는 로깅 프레임워크를 사용합니다. 구현체를 손쉽게 교체할 수 있도록 도와주는 프레임 워크입니다. Slf4j는 인터페이스고 내부 구현체로 logback을 가지고 있는데, Log4j2를 사용하기 위해 exclude 해야 합니다.
+    implementation.exclude module: 'spring-boot-starter-logging'
+}
+
+java {
+	// Gradle 자체를 실행하는 데 사용되는 JDK와 별개로 프로젝트를 컴파일, 테스트, 실행하는 데 사용할 JDK 버전을 지정
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+subprojects {
+	// subprojects 블록 안에서는 plugins 블록을 사용할 수 없어, 플러그인 등록을 위해서는 apply plugin 을 사용해야한다.
+	// setting.gradle에서 include된 모든 프로젝트에 공통적으로 적용할 설정
+	apply plugin: 'java'
+	// build.gradle 에서 api() 를 사용하려면 java-library 플러그인을 적용해야한다.
+	apply plugin: 'java-library'
+	apply plugin: 'org.springframework.boot'
+	// spring boot dependency 플러그인을 적용하여 사용중인 부트 버전에서 자동으로 의존성을 가져온다.
+	apply plugin: 'io.spring.dependency-management'
+
+	repositories {
+		mavenCentral()
+	}
+
+	configurations {
+		compileOnly {
+			extendsFrom annotationProcessor
+		}
+	}
+
+	dependencies {
+		implementation 'org.springframework.boot:spring-boot-starter'
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+		testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	}
+
+	tasks.named('test') {
+		useJUnitPlatform()
+	}
+}
+
+ext.libraries = [ // Groovy map literal
+	// spring boot starter
+    spring_boot_starter_data_rest: 'org.springframework.boot:spring-boot-starter-data-rest'
+	, spring_boot_starter_web: 'org.springframework.boot:spring-boot-starter-web'
+    , spring_boot_starter_jdbc: 'org.springframework.boot:spring-boot-starter-jdbc'
+    , spring_boot_starter_jpa: 'org.springframework.boot:spring-boot-starter-data-jpa'
+    , spring_boot_starter_aop: 'org.springframework.boot:spring-boot-starter-aop'
+	, spring_boot_starter_log4j2: 'org.springframework.boot:spring-boot-starter-log4j2:3.4.2'
+	, spring_boot_starter_actuator: 'org.springframework.boot:spring-boot-starter-actuator'
+	, spring_boot_starter_test: 'org.springframework.boot:spring-boot-starter-test'
+	, spring_cloud_starter_config: 'org.springframework.cloud:spring-cloud-starter-config'
+	, spring_boot_starter_devtool: 'org.springframework.boot:spring-boot-devtools'
+	// lombok
+	, lombok: 'org.projectlombok:lombok'
+    , projectlombok: 'org.projectlombok:lombok'
+    // Prometheus
+    , prometheus: 'io.micrometer:micrometer-registry-prometheus:1.11.2'
+	// Json
+	, fast_json : 'com.alibaba:fastjson:1.2.79'
+    , faster_core : 'com.fasterxml.jackson.core:jackson-core:2.13.1'
+    , faster_databind : 'com.fasterxml.jackson.core:jackson-databind:2.13.1'
+    , faster_annotations : 'com.fasterxml.jackson.core:jackson-annotations:2.13.1'
+	// Swagger
+	, swagger: 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+	// Test
+	, junit_platform_launcher: 'org.junit.platform:junit-platform-launcher'
+]
+
+project(':common') {
+}
+
+project(':accounts') {
+    dependencies {
+        implementation project(':common')
+    }
+}
+
+project(':cards') {
+    dependencies {
+        implementation project(':common')
+    }
+}
+
+project(':loans') {
+    dependencies {
+        implementation project(':common')
+    }
+}
+
+project(':basemodule') {
+    dependencies {
+        implementation project(':common')
+    }
+}
+
+project(':configserver') {
+    dependencies {
+        implementation project(':common')
+    }
+}
+
+project(':eurekaserver') {
+    dependencies {
+        implementation project(':common')
+    }
+}
+
+project(':gatewayserver') {
+    dependencies {
+        implementation project(':common')
+    }
+}
+
+project(':messages') {
+    dependencies {
+        implementation project(':common')
+    }
+}
