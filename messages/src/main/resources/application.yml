@@ -1,3 +1,31 @@
+server:
+  port: 9010
+
 spring:
   application:
-    name: messages
+    name: "message"
+  profiles:
+    # active: native # target: file directory
+    active: local
+  cloud:
+    function:
+      definition: email|sms
+    stream:
+      bindings:
+        emailsms-in-0:
+          destination: send-communication
+          group: ${spring.application.name}
+        emailsms-out-0:
+          destination: communication-sent
+  rabbitmq:
+    host: svc-rabbitmq-app
+    port: 5672
+    username: guest
+    password: guest
+    connection-timeout: 10s
+
+# logging 설정
+logging:
+  config: classpath:log4j2.xml
+# logging.pattern.console=%clr(%d{yy-MM-dd E HH:mm:ss.SSS}){green} %highlight([%-5level]) %clr(%logger{1.}){faint} %clr(:){red} %clr(%m){cyan}%n
+# logging.pattern.conversion.class=ch.qos.logback.classic.pattern.ClassNameOnlyConverter

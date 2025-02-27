@@ -1,0 +1,22 @@
+spring:
+  cloud:
+    config:
+      server:
+        # native:
+          # search-locations: "classpath:/config" // resource 폴더 아래의 config 폴더
+          # search-locations: "file:///Users//eazybytes//Documents//config"
+        git:
+          # uri: "file:///Users//eazybytes//Documents//config"
+          # <- git 으로 init 된 디렉토리 (로컬 git 디렉토리). git init -> git add . -> git commit -m "commit message" -> git branch -M main
+          uri: https://github.com/newtein80/msa_config_files.git
+          default-label: main # branch name
+          # search-paths: "{application}"
+          timeout: 5
+          clone-on-start: true
+          force-pull: true
+
+  rabbitmq:
+    host: svc-rabbitmq-app
+    port: 5672
+    username: "guest"
+    password: "guest"

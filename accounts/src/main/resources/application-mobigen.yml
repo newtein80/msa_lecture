@@ -1,0 +1,26 @@
+spring:
+  sql:
+    init:
+      platform: mysql
+      mode: always
+      schema-locations: classpath:db/mysql/schema.sql
+  datasource:
+    url: jdbc:mysql://192.168.100.221:30206/lecture?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+    username: root
+    password: root1
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  # jpa 설정
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+  config:
+    import: "optional:configserver:http://svc-configserver-app:8071/"
+  rabbitmq:
+    host: svc-rabbitmq-app
+    port: 5672
+    username: guest
+    password: guest
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://svc-eureka-app:8761/eureka

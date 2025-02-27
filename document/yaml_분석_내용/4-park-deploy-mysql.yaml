@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: park-mysql-deployment
+  namespace: park1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deploy-park-mysql # service 에서 매칭해야 할 이름
+  template:
+    metadata:
+      labels:
+        app: deploy-park-mysql # service 에서 매칭해야 할 이름
+    spec:
+      containers:
+      - name: mysql
+        image: 192.168.205.10:5000/mysql:latest
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "root1"
+        - name: MYSQL_DATABASE
+          value: "lecture"
+        - name: MYSQL_USER
+          value: "park"
+        - name: MYSQL_PASSWORD
+          value: "park1234"
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: park-mysql-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: park-mysql-storage # volumeMounts.name 과 같아야 함
+        persistentVolumeClaim:
+          claimName: park-mysql-pvc # pvc 의 metadata.name

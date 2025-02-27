@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-park-configserver
+  namespace: park1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      # service 에서 매칭해야 할 이름
+      app: deploy-park-configserver
+  template:
+    metadata:
+      labels:
+        # service 에서 매칭해야 할 이름
+        app: deploy-park-configserver
+    spec:
+      containers:
+      - name: container-park-configserver
+        # docker build -t 192.168.205.10:5000/configserver:latest .
+        # docker push 192.168.205.10:5000/configserver:latest 
+        image: 192.168.205.10:5000/configserver:latest 
+        imagePullPolicy: Always #IfNotPresent
+        ports:
+        - containerPort: 8071
+---
+apiVersion: v1
+kind: Service
+metadata:
+  # container 내부 pod 간의 연결 host ex) svc-park-configserver:8071
+  name: svc-park-configserver
+  namespace: park1
+spec:
+  selector:
+    # Deployment 의 아래 속성과 동일해야 한다.
+    # spec.selector.matchLabels.app
+    # spec.template.metadata.labels.app
+    app: deploy-park-configserver
+  ports:
+    - protocol: TCP
+      port: 8071
+      targetPort: 8071
+      nodePort: 30001
+  type: NodePort

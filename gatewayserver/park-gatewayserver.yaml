@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-park-gatewayserver
+  namespace: park1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      # service 에서 매칭해야 할 이름
+      app: deploy-park-gatewayserver
+  template:
+    metadata:
+      labels:
+        # service 에서 매칭해야 할 이름
+        app: deploy-park-gatewayserver
+    spec:
+      containers:
+      - name: container-park-gatewayserver
+        # docker build -t 192.168.205.10:5000/gatewayserver:latest .
+        # docker push 192.168.205.10:5000/gatewayserver:latest 
+        image: 192.168.205.10:5000/gatewayserver:latest 
+        imagePullPolicy: Always #IfNotPresent
+        ports:
+        - containerPort: 9000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  # container 내부 pod 간의 연결 host ex) svc-park-gatewayserver:9000
+  name: svc-park-gatewayserver
+  namespace: park1
+spec:
+  selector:
+    # Deployment 의 아래 속성과 동일해야 한다.
+    # spec.selector.matchLabels.app
+    # spec.template.metadata.labels.app
+    app: deploy-park-gatewayserver
+  ports:
+    - protocol: TCP
+      port: 9000
+      targetPort: 9000
+      nodePort: 30003
+  type: NodePort

@@ -1,3 +1,19 @@
+server:
+  port: 8761
+
 spring:
-  application:
-    name: eurekaserver
+ application:
+  name: eureka
+
+# eureka 설정
+eureka:
+  # eureka 서버 자신이기 때문에 클라이언트 관련 설정은 false로 세팅 (즉 서버 자신이 자신을 클라이언트로 등록할지 여부, default는 true이다. 클러스터 설정(eureka server가 2개)인 경우에는 true.)
+  client:
+    register-with-eureka: false # eureka server 를 registry 에 등록할지 여부
+    fetch-registry: false # registry 에 있는 정보들을 가져올지 여부
+
+# logging 설정
+logging:
+  config: classpath:log4j2.xml
+# logging.pattern.console=%clr(%d{yy-MM-dd E HH:mm:ss.SSS}){green} %highlight([%-5level]) %clr(%logger{1.}){faint} %clr(:){red} %clr(%m){cyan}%n
+# logging.pattern.conversion.class=ch.qos.logback.classic.pattern.ClassNameOnlyConverter

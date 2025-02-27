@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: group1-team2-app
+  namespace: group1-team2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: group1-team2-app
+  template:
+    metadata:
+      labels:
+        app: group1-team2-app
+    spec:
+      containers:
+      - name: group1-team2-app
+        images: 192.168.100.222:5000/group1-team2-app:1.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: logs-volume
+          mountPath: "/app/logs"
+      volumes:
+      - name: logs-volume
+        persistentVolumeClaim:
+          claimName: group1-team2-app-log-pvc

@@ -1,11 +1,30 @@
 bootJar { enabled = true } // bootJar 로 패키징
 jar { enabled = false } // 일반적인 JAR 파일로 패키징
 
+ext {
+	set('springCloudVersion', "2024.0.0")
+}
+
 dependencies {
 	implementation libraries.spring_boot_starter_web
 	implementation libraries.spring_boot_starter_aop
 	implementation libraries.spring_boot_starter_actuator
+	implementation libraries.spring_boot_starter_jpa
+	// eureka
+	implementation libraries.eureka_client
+	// cloud
+	implementation libraries.spring_cloud_starter_config
+	// swagger
 	implementation libraries.swagger
+	// OpenFeign
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+	// rabbitMQ + stream
+	implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
+	implementation 'org.springframework.cloud:spring-cloud-stream'
+	implementation 'org.springframework.cloud:spring-cloud-stream-binder-rabbit'
+	// Driver
+	runtimeOnly libraries.h2
+	runtimeOnly libraries.mysql
 	// common
 	implementation libraries.spring_boot_starter_log4j2
 	compileOnly libraries.lombok
@@ -13,4 +32,10 @@ dependencies {
 	annotationProcessor libraries.lombok
 	testImplementation libraries.spring_boot_starter_test
 	testRuntimeOnly libraries.junit_platform_launcher
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
 }

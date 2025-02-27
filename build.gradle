@@ -90,10 +90,14 @@ ext.libraries = [ // Groovy map literal
     , spring_boot_starter_jpa: 'org.springframework.boot:spring-boot-starter-data-jpa'
     , spring_boot_starter_aop: 'org.springframework.boot:spring-boot-starter-aop'
 	, spring_boot_starter_log4j2: 'org.springframework.boot:spring-boot-starter-log4j2:3.4.2'
-	, spring_boot_starter_actuator: 'org.springframework.boot:spring-boot-starter-actuator'
 	, spring_boot_starter_test: 'org.springframework.boot:spring-boot-starter-test'
-	, spring_cloud_starter_config: 'org.springframework.cloud:spring-cloud-starter-config'
 	, spring_boot_starter_devtool: 'org.springframework.boot:spring-boot-devtools'
+    // eureka
+    , eureka_client: 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    // monitoring
+	, spring_boot_starter_actuator: 'org.springframework.boot:spring-boot-starter-actuator'
+    // cloud
+	, spring_cloud_starter_config: 'org.springframework.cloud:spring-cloud-starter-config'
 	// lombok
 	, lombok: 'org.projectlombok:lombok'
     , projectlombok: 'org.projectlombok:lombok'
@@ -108,6 +112,10 @@ ext.libraries = [ // Groovy map literal
 	, swagger: 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 	// Test
 	, junit_platform_launcher: 'org.junit.platform:junit-platform-launcher'
+    // Driver - runtimeOnly
+    , h2: 'com.h2database:h2'
+    , mysql: 'com.mysql:mysql-connector-j'
+    , postgresql: 'org.postgresql:postgresql'
 ]
 
 project(':common') {

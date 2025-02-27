@@ -1,0 +1,7 @@
+spring:
+  rabbitmq:
+    host: svc-park-rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+    connection-timeout: 10s

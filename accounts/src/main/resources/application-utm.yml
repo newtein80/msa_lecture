@@ -1,0 +1,32 @@
+spring:
+  sql:
+    init:
+      platform: h2
+      mode: always
+      schema-locations: classpath:db/h2/schema.sql
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password: 
+    driver-class-name: org.h2.Driver
+  h2:
+    # h2 데이터베이스 url 및 접근
+    console:
+      path: /h2
+      settings:
+        web-allow-others: true
+  # jpa 설정
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+  config:
+    import: "optional:configserver:http://svc-park-configserver:8071/"
+  rabbitmq:
+    host: svc-park-rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://svc-park-eurekaserver:8761/eureka

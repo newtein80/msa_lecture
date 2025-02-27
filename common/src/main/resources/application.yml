@@ -1,3 +1,11 @@
 spring:
   application:
     name: common
+
+# Swagger 설정
+springdoc:
+  # 특정 경로만 선택적으로 Swagger UI에 노출하고 싶을 때 사용
+  paths-to-match: "/**"
+  swagger-ui:
+    # Swagger UI 활성화 여부
+    enabled: false
